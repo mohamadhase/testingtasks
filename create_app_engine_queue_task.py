@@ -16,7 +16,7 @@ from __future__ import print_function
 
 import argparse
 import os
-os.environ["GOOGLE_APPLICATION_CREDENTIALS"]="C:/Users/Hitech/Downloads/training2-project-2e1afbe3c451.json"
+os.environ["GOOGLE_APPLICATION_CREDENTIALS"]="C:/Users/MohammadAB/Desktop/New folder/testingtasks/training2-project-2e1afbe3c451.json"
 
 def create_task(project, queue, location, payload=None, in_seconds=None):
     # [START cloud_tasks_appengine_create_task]
@@ -42,22 +42,23 @@ def create_task(project, queue, location, payload=None, in_seconds=None):
 
     # Construct the request body.
     task = {
-            'app_engine_http_request': {  # Specify the type of request.
-                'http_method': tasks_v2.HttpMethod.POST,
-                'relative_uri': '/example_task_handler'
+            'http_request': {  # Specify the type of request.
+                'http_method': tasks_v2.HttpMethod.GET,
+                'url': 'https://europe-west1-training2-project.cloudfunctions.net/TestTask',
             }
     }
+
     if payload is not None:
         if isinstance(payload, dict):
             # Convert dict to JSON string
             payload = json.dumps(payload)
             # specify http content-type to application/json
-            task["app_engine_http_request"]["headers"] = {"Content-type": "application/json"}
+            task["http_request"]["headers"] = {"Content-type": "application/json"}
         # The API expects a payload of type bytes.
         converted_payload = payload.encode()
 
         # Add the payload to the request.
-        task['app_engine_http_request']['body'] = converted_payload
+        # task['http_request']['body'] = converted_payload
 
     if in_seconds is not None:
         # Convert "seconds from now" into an rfc3339 datetime string.
